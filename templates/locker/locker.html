@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Ponto 24 • Locker Virtual</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --orange: #ff6a00;
+            --dark: #1f2933;
+            --light: #f5f6f7;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: var(--light);
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* HEADER */
+
+        .header {
+            position: absolute;
+            top: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--orange);
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* LAYOUT */
+
+        .system {
+
+            display: grid;
+            grid-template-columns: 1fr 350px 1fr;
+            gap: 40px;
+
+            width: 95%;
+            height: 85vh;
+
+            align-items: center;
+
+        }
+
+        /* LOCKER GRID */
+
+        .locker-grid {
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 85px;
+
+            gap: 10px;
+
+        }
+
+        /* LOCKERS */
+
+        .locker {
+
+            background: var(--dark);
+            color: white;
+
+            border-radius: 8px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+
+        }
+
+        .small {
+            grid-row: span 1;
+        }
+
+        .medium {
+            grid-row: span 2;
+        }
+
+        .large {
+            grid-row: span 3;
+        }
+
+        .locker {
+            background: var(--orange);
+        }
+
+        .open {
+            background: #2ecc71;
+        }
+
+        /* CONSOLE */
+
+        .console {
+
+            background: var(--dark);
+            padding: 25px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+
+        }
+
+        /* SCREEN */
+
+        .screen {
+
+            background: black;
+            color: #00ff9c;
+
+            height: 70px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-family: monospace;
+
+            border-radius: 6px;
+
+            margin-bottom: 15px;
+
+        }
+
+        /* PIN DISPLAY */
+
+        .pin {
+
+            background: #333;
+            color: white;
+
+            text-align: center;
+
+            font-size: 26px;
+
+            padding: 10px;
+
+            border-radius: 6px;
+
+            margin-bottom: 15px;
+
+            letter-spacing: 8px;
+
+        }
+
+        /* KEYPAD */
+
+        .keypad {
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 10px;
+
+        }
+
+        .keypad button {
+
+            height: 55px;
+            font-size: 20px;
+
+            border: none;
+            border-radius: 6px;
+
+            background: #f1f1f1;
+
+            cursor: pointer;
+
+        }
+
+        /* ACTION BUTTONS */
+
+        .actions {
+
+            margin-top: 15px;
+
+            display: flex;
+
+            gap: 10px;
+
+        }
+
+        .btn-open {
+
+            background: var(--orange);
+            color: white;
+
+            flex: 1;
+
+            border: none;
+
+            padding: 10px;
+
+            border-radius: 6px;
+
+        }
+
+        .btn-clear {
+
+            background: #888;
+            color: white;
+
+            flex: 1;
+
+            border: none;
+
+            padding: 10px;
+
+            border-radius: 6px;
+
+        }
+
+        .btn-cancel {
+
+            background: #444;
+            color: white;
+
+            flex: 1;
+
+            border: none;
+
+            padding: 10px;
+
+            border-radius: 6px;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="logo">
+            PONTO 24
+        </div>
+
+        <div class="subtitle">
+            Rede Inteligente de Cacifos para Entregas
+        </div>
+
+    </div>
+
+
+    <div class="system">
+
+        <!-- LOCKERS ESQUERDA -->
+
+        <div class="locker-grid">
+
+            <div class="locker small " id="locker1">S1</div>
+            <div class="locker medium " id="locker2">M1</div>
+            <div class="locker small" id="locker3">S2</div>
+
+            <div class="locker large " id="locker4">L1</div>
+            <div class="locker small " id="locker5">S3</div>
+            <div class="locker small" id="locker6">S4</div>
+
+            <div class="locker medium" id="locker7">M2</div>
+            <div class="locker small " id="locker8">S5</div>
+            <div class="locker small" id="locker9">S6</div>
+            <div class="locker small" id="locker21">S7</div>
+            <div class="locker small" id="locker22">S8</div>
+        </div>
+
+        <!-- CONSOLE -->
+
+        <div class="console">
+
+            <div class="screen" id="screen">
+                Insira o código recebido
+            </div>
+
+            <div class="pin" id="pinDisplay">
+                ------
+            </div>
+
+            <div class="keypad">
+
+                <button onclick="press(1)">1</button>
+                <button onclick="press(2)">2</button>
+                <button onclick="press(3)">3</button>
+
+                <button onclick="press(4)">4</button>
+                <button onclick="press(5)">5</button>
+                <button onclick="press(6)">6</button>
+
+                <button onclick="press(7)">7</button>
+                <button onclick="press(8)">8</button>
+                <button onclick="press(9)">9</button>
+
+                <button onclick="clearPin()">C</button>
+                <button onclick="press(0)">0</button>
+                <button onclick="backspace()">←</button>
+
+            </div>
+
+            <div class="actions">
+
+                <button class="btn-clear" onclick="clearPin()">Limpar</button>
+
+                <button class="btn-open" onclick="openLocker()">Abrir</button>
+
+                <button class="btn-cancel" onclick="closeLocker()">Fechar</button>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOCKERS DIREITA -->
+
+        <div class="locker-grid">
+
+            <div class="locker small " id="locker10">S9</div>
+            <div class="locker medium " id="locker11">M3</div>
+            <div class="locker small" id="locker12">S9</div>
+
+            <div class="locker large " id="locker13">L2</div>
+            <div class="locker small " id="locker14">S10</div>
+            <div class="locker small" id="locker15">S11</div>
+
+            <div class="locker medium" id="locker16">M4</div>
+            <div class="locker small " id="locker17">S12</div>
+            <div class="locker small" id="locker18">S13</div>
+            <div class="locker small" id="locker19">S14</div>
+            <div class="locker small" id="locker20">S15</div>
+        </div>
+
+    </div>
+
+    <script>
+
+        let pin = ""
+        let currentOpenLocker = null
+        let currentOrderId = null
+
+        /* =========================
+        PIN PAD
+        ========================= */
+
+        function press(num) {
+            if (pin.length < 6) {
+                pin += num
+                updateDisplay()
+            }
+        }
+
+        function updateDisplay() {
+            let masked = pin.padEnd(6, "-")
+            document.getElementById("pinDisplay").innerText = masked
+        }
+
+        function clearPin() {
+            pin = ""
+            updateDisplay()
+            document.getElementById("screen").innerText = "Digite o código"
+        }
+
+        function backspace() {
+            pin = pin.slice(0, -1)
+            updateDisplay()
+        }
+
+
+        /* =========================
+        CARREGAR STATUS DOS LOCKERS
+        ========================= */
+
+        async function loadLockers() {
+
+            const res = await fetch("/api/lockers")
+            const lockers = await res.json()
+
+            lockers.forEach(l => {
+
+                const div = document.getElementById("locker" + l.id)
+
+                if (!div) return
+
+                div.classList.remove("occupied", "open")
+
+                if (l.status === "occupied") {
+                    div.classList.add("occupied")
+                }
+
+                if (l.status === "open") {
+                    div.classList.add("open")
+                }
+
+            })
+
+        }
+
+
+        /* =========================
+        ABRIR LOCKER
+        ========================= */
+
+        async function openLocker() {
+
+            const screen = document.getElementById("screen")
+
+            if (pin.length < 6) {
+                screen.innerText = "Digite um código válido"
+                return
+            }
+
+            const res = await fetch("/open_locker", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    code: pin
+                })
+            })
+
+            const data = await res.json()
+
+            if (data.status === "success") {
+
+                const locker = document.getElementById("locker" + data.locker_id)
+
+                locker.classList.remove("occupied")
+                locker.classList.add("open")
+
+                currentOpenLocker = locker
+                currentOrderId = data.order_id
+
+                screen.innerText = "Locker " + data.locker_id + " aberto"
+
+                pin = ""
+                updateDisplay()
+
+            } else {
+
+                screen.innerText = data.message
+
+            }
+
+        }
+        async function refreshLockers() {
+
+            const res = await fetch("/api/lockers")
+            const lockers = await res.json()
+
+            lockers.forEach(l => {
+
+                const div = document.getElementById("locker" + l.id)
+
+                if (!div) return
+
+                div.classList.remove("free", "occupied", "open")
+
+                div.classList.add(l.status)
+
+            })
+
+        }
+
+        setInterval(refreshLockers, 2000)
+
+
+        /* =========================
+        FECHAR LOCKER
+        ========================= */
+
+        async function closeLocker() {
+
+            const screen = document.getElementById("screen")
+
+            if (!currentOpenLocker) {
+                screen.innerText = "Nenhum locker aberto"
+                return
+            }
+
+            const res = await fetch("/close_locker", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    order_id: currentOrderId
+                })
+            })
+
+            const data = await res.json()
+
+            if (data.status === "success") {
+
+                currentOpenLocker.classList.remove("open")
+                currentOpenLocker.classList.add("occupied")
+
+                screen.innerText = "Locker fechado"
+
+                currentOpenLocker = null
+                currentOrderId = null
+
+                loadLockers()
+
+            }
+
+        }
+
+
+        /* =========================
+        CARREGAR LOCKERS AO ABRIR
+        ========================= */
+
+        window.onload = () => {
+            loadLockers()
+        }
+
+    </script>
+
+
+</body>
+
+</html>

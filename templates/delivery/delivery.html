@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Entregador | pONTO 24</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            width: 420px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            background: #ff7a00;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e96d00;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f1f1;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .locker-info {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Registrar Entrega</h2>
+
+        <input id="name" placeholder="Nome do cliente">
+
+        <input id="email" placeholder="Email do cliente">
+
+        <select id="size">
+            <option value="small">Pequeno</option>
+            <option value="medium">Médio</option>
+            <option value="large">Grande</option>
+        </select>
+
+        <button onclick="createOrder()">Criar Pedido</button>
+
+        <div class="status">
+
+            <div id="message">
+                Aguardando pedido...
+            </div>
+
+            <div class="locker-info" id="lockerInfo"></div>
+
+            <button id="closeBtn" onclick="closeLocker()" style="display:none">
+                Fechar Locker
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        let currentLocker = null
+
+        async function createOrder() {
+
+            const name = document.getElementById("name").value
+            const email = document.getElementById("email").value
+            const size = document.getElementById("size").value
+
+            const res = await fetch("/delivery_create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    size: size
+                })
+            })
+
+            const data = await res.json()
+
+            if (data.status === "success") {
+
+                currentLocker = data.locker_id
+
+                document.getElementById("message").innerText = "Locker aberto para colocar pacote"
+
+                document.getElementById("lockerInfo").innerText = "Locker: " + currentLocker
+
+                document.getElementById("closeBtn").style.display = "block"
+
+            } else {
+
+                document.getElementById("message").innerText = "Nenhum locker disponível"
+
+            }
+
+        }
+        async function closeLocker() {
+
+            const res = await fetch("/delivery_close", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    locker_id: currentLocker
+                })
+            })
+
+            const data = await res.json()
+
+            if (data.status === "success") {
+
+                document.getElementById("message").innerText = "Pacote colocado com sucesso"
+
+                document.getElementById("closeBtn").style.display = "none"
+
+                document.getElementById("lockerInfo").innerText = ""
+
+                currentLocker = null
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
