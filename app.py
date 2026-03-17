@@ -4,8 +4,7 @@ from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
 from models import db, Order, Locker
 from models import find_available_locker
 
-
-#from utils.messaging import send_code
+from utils.messaging import send_code, send_pickup_notice
 
 app = Flask(__name__)
 
@@ -76,7 +75,7 @@ def delivery_create():
     locker = find_available_locker(data["size"])
 
     if not locker:
-        print("❌ Nenhum locker disponível")
+        print("Nenhum locker disponível")
         return {"status":"error"}
 
     code = str(random.randint(100000,999999))
@@ -94,12 +93,12 @@ def delivery_create():
     db.session.add(order)
     db.session.commit()
 
-    print("\n📦 NOVO PEDIDO CRIADO")
+    print("\nNOVO PEDIDO CRIADO")
     print("Cliente:", order.name)
     print("Email:", order.email)
     print("Locker:", locker.id)
     print("Código do cliente:", code)
-    print("➡️ Locker aberto para o entregador colocar o pacote\n")
+    print("Locker aberto para o entregador colocar o pacote\n")
 
     return {
         "status":"success",
@@ -119,12 +118,14 @@ def delivery_close():
 
     db.session.commit()
 
-    print("\n📦 PACOTE ENTREGUE NO LOCKER")
+    send_code(order.email, order.code, locker.id)
+
+    print("\n PACOTE ENTREGUE NO LOCKER")
     print("Locker:", locker.id)
     print("Cliente:", order.name)
     print("Email:", order.email)
     print("Código para retirada:", order.code)
-    print("📧 Cliente notificado (DEBUG)\n")
+    print("Cliente notificado (DEBUG)\n")
 
     return {"status":"success"}
 
@@ -163,9 +164,11 @@ def client_close():
 
     locker.status = "free"
 
-    print("\n✅ PACOTE RETIRADO")
+    print("\nPACOTE RETIRADO")
     print("Cliente:", order.name)
     print("Locker:", locker.id)
+
+    send_pickup_notice(order.email, locker.id)
 
     order.status = "completed"
     order.locker = None   # remove ligação com locker
@@ -187,7 +190,7 @@ def debug_set_locker():
     if status == "free" and locker.order:
         locker.order.locker = None
         locker.order.status = "completed"
-        print("⚙ DEBUG limpou ligação do pedido")
+        print("DEBUG limpou ligação do pedido")
 
     db.session.commit()
 
@@ -235,11 +238,11 @@ def debug_close_locker():
 
         if locker.order and locker.order.status != "completed":
             locker.status = "occupied"
-            print("⚙ DEBUG: locker fechado com encomenda")
+            print("DEBUG: locker fechado com encomenda")
 
         else:
             locker.status = "free"
-            print("⚙ DEBUG: locker fechado e ficou livre")
+            print("DEBUG: locker fechado e ficou livre")
 
         db.session.commit()
 

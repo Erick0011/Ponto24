@@ -21,8 +21,8 @@ class Order(db.Model):
     name = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(50))
     email = db.Column(db.String(100))
-    size = db.Column(db.String(20))  # tamanho do pedido
-    code = db.Column(db.String(10))  # PIN para abrir locker
+    size = db.Column(db.String(20))
+    code = db.Column(db.String(10))
     status = db.Column(db.String(20), default="pending")  # pending, delivered
 
     # Locker relacionado

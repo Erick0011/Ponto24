@@ -47,3 +47,47 @@
 .btn-primary:hover{
     background:#e55d00;
 }
+
+.footer{
+    background:#1f2933;
+    color:#d1d5db;
+}
+
+.footer .brand{
+    color:#ff6a00;
+    font-weight:700;
+}
+
+.footer a{
+    color:#d1d5db;
+    text-decoration:none;
+}
+
+.footer a:hover{
+    color:#ff6a00;
+}
+
+.contact div{
+    margin:8px 0;
+}
+
+.contact i{
+    margin-right:8px;
+    color:#ff6a00;
+}
+
+.navbar-simple{
+    background:#1f2933;
+    padding:12px 0;
+}
+
+.navbar-simple .brand{
+    color:#ff6a00;
+    font-weight:700;
+    font-size:20px;
+}
+
+.navbar-simple .tagline{
+    color:#d1d5db;
+    font-size:14px;
+}

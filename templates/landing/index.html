@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ponto 24 - Smart Lockers</title>
+    <title>Ponto 24 • Smart Lockers</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/favicon.png') }}">
 
 </head>
 <body>
+    {% include "landing/header.html" %}
     <!-- HERO SECTION -->
     <section class="bg-light text-dark py-5">
         <div class="container">
@@ -23,7 +27,7 @@
                         O <strong>Ponto 24</strong> conecta lojas online e clientes através de smart lockers estrategicamente localizados.
                         Retire suas encomendas quando quiser, sem depender de entregadores ou horários rígidos.
                     </p>
-                    <a href="#simulator" class="btn btn-primary btn-lg mt-3">Ver demonstração</a>
+                    <!-- <a href="#simulator" class="btn btn-primary btn-lg mt-3">Ver demonstração</a>-->
                 </div>
 
                 <!-- Imagem / Mockup -->
@@ -54,7 +58,7 @@
                             <img src="static/images/Icon_Phone.svg" width="60">
                         </div>
                     </div>
-                    <h5 class="fw-bold">Step 1</h5>
+                    <h5 class="fw-bold">1</h5>
                     <p>
                         O cliente faz uma encomenda online usando o endereço do locker Ponto 24.
                     </p>
@@ -68,7 +72,7 @@
                             <img src="static/images/Icon_OnTimeDelivery.svg" width="60">
                         </div>
                     </div>
-                    <h5 class="fw-bold">Step 2</h5>
+                    <h5 class="fw-bold">2</h5>
                     <p>
                         Uma notificação é enviada quando a encomenda é colocada no locker e está pronta para retirada.
                     </p>
@@ -82,7 +86,7 @@
                             <img src="static/images/Icon_Locker.svg" width="60">
                         </div>
                     </div>
-                    <h5 class="fw-bold">Step 3</h5>
+                    <h5 class="fw-bold">3</h5>
                     <p>
                         O cliente vai até o locker e segue as instruções simples mostradas na tela.
                     </p>
@@ -96,7 +100,7 @@
                             <img src="static/images/Icon_Box.svg" width="60">
                         </div>
                     </div>
-                    <h5 class="fw-bold">Step 4</h5>
+                    <h5 class="fw-bold">4</h5>
                     <p>
                         Pronto! O cliente insere o código recebido e o locker abre para retirar a encomenda.
                     </p>
@@ -217,14 +221,14 @@
                 mais seguras, simples e acessíveis 24 horas por dia.
             </p>
 
-            <a href="#contact" class="btn btn-primary btn-lg mt-3">
+            <a href="href=mailto:ponto24.ao@gmail.com" class="btn btn-primary btn-lg mt-3">
                 Solicitar informações
             </a>
 
         </div>
 
         </section>
-
+    {% include "landing/footer.html" %}
 
 
 
