@@ -83,9 +83,12 @@
 
         <h2>Registrar Entrega</h2>
 
-        <input id="name" placeholder="Nome do cliente">
+        <input id="name" placeholder="Nome do cliente"
+       pattern="[A-Za-zÀ-ÿ\s]{3,50}"
+       title="Use apenas letras e espaços, entre 3 e 50 caracteres"
+       required>
 
-        <input id="email" placeholder="Email do cliente">
+        <input id="email" type="email" placeholder="Email do cliente" required>
 
         <select id="size">
             <option value="small">Pequeno</option>
@@ -117,9 +120,20 @@
 
         async function createOrder() {
 
-            const name = document.getElementById("name").value
-            const email = document.getElementById("email").value
+            const name = document.getElementById("name")
+            const email = document.getElementById("email")
             const size = document.getElementById("size").value
+
+            // Validação HTML5
+            if (!name.checkValidity()) {
+                document.getElementById("message").innerText = name.title
+                return
+            }
+
+            if (!email.checkValidity()) {
+                document.getElementById("message").innerText = "Digite um email válido"
+                return
+            }
 
             const res = await fetch("/delivery_create", {
                 method: "POST",
@@ -127,8 +141,8 @@
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    name: name,
-                    email: email,
+                    name: name.value,
+                    email: email.value,
                     size: size
                 })
             })
@@ -150,8 +164,8 @@
                 document.getElementById("message").innerText = "Nenhum locker disponível"
 
             }
-
         }
+
         async function closeLocker() {
 
             const res = await fetch("/delivery_close", {
