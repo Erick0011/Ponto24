@@ -72,6 +72,14 @@ def delivery_create():
 
     data = request.json
 
+    locker_aberto = Locker.query.filter_by(status="open").first()
+
+    if locker_aberto:
+        return {
+            "status": "error",
+            "message": "Já existe um locker aberto"
+        }
+
     locker = find_available_locker(data["size"])
 
     if not locker:
@@ -116,9 +124,11 @@ def delivery_close():
 
     locker.status = "occupied"
 
+    send_code(order.email, order.code, locker.id)
+
     db.session.commit()
 
-    send_code(order.email, order.code, locker.id)
+
 
     print("\n PACOTE ENTREGUE NO LOCKER")
     print("Locker:", locker.id)
@@ -133,6 +143,14 @@ def delivery_close():
 def open_locker():
 
     code = request.json["code"]
+
+    locker_aberto = Locker.query.filter_by(status="open").first()
+
+    if locker_aberto:
+        return {
+            "status": "error",
+            "message": "Já existe um locker aberto"
+        }
 
     order = Order.query.filter_by(code=code).first()
 
